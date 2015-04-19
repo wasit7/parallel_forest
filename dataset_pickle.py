@@ -179,7 +179,7 @@ class dataset:
         #3 self.theta_dim: [0_r1, 1_c1, 2_r2, 3_c2, 4_bin]^T
         #6 self.samples: samples[x]=[0_class, 1_img, 2_row, 3_column]^T
         
-        n_proposal=10     
+        n_proposal=100     
         if len(x)>n_proposal:
             x=np.random.permutation(x)[:n_proposal]
         #ux=np.random.randint(-mtran,mtran,size=len(x))

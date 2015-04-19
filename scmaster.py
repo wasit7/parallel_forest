@@ -36,8 +36,8 @@ class master:
 #init local variables
         print("master>> init local variables")         
         self.minbagsize=2
-        #self.maxdepth=20
-        self.maxdepth=10        
+        self.maxdepth=20
+        #self.maxdepth=10        
         self.queue=None
         self.root=None
         self.node=None
