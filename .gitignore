@@ -58,4 +58,6 @@ target/
 
 #local project
 *.pic
+*.out
+*.pickle
 dataset_pickle/
