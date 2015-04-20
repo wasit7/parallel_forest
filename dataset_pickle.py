@@ -7,22 +7,22 @@ Created on Tue Oct 14 18:52:01 2014
 """
 import numpy as np
 import os
-from PIL import Image
-from scipy.ndimage import filters
+#from PIL import Image
+#from scipy.ndimage import filters
 try:
     import json
 except ImportError:
     import simplejson as json
 #1800
-num_img=100
-spi=5
-
-rootdir="dataset"
-mrec=64
-mtran=64
-margin=mrec+mtran
+#num_img=100
+#spi=5
+#
+#rootdir="dataset"
+#mrec=64
+#mtran=64
+#margin=mrec+mtran
 class dataset:
-    def __init__(self):
+    def __init__(self,index=0):
         '''
         To create and initialise        
         self.dimtheta--(m)dimension of theta. theta is a column vector
@@ -57,13 +57,15 @@ class dataset:
         # L3(r2c1)----L4(r2c2)
         '''
         import pickle
-        pickleFile = open('spiral.pic', 'rb')
+        self.index=index
+        self.path='training/dataset%02d.pic'%(self.index)    
+        pickleFile = open(self.path, 'rb')
         self.clmax,self.theta_dim,self.theta_range,self.size,self.samples,self.I = pickle.load(pickleFile)
         pickleFile.close()                   
     def __str__(self):
-        return "datset_pickle: cmax=%d, theta_dim=%d, theta_range=%d \n\
-        size=%d, label.shape=%s, I.shape=%s"\
-        %(self.clmax,self.theta_dim,self.theta_range,self.size,self.samples.shape,self.I.shape)
+        return 'datset_pickle: path=./"%s" cmax=%d, theta_dim=%d, theta_range=%d \n\
+        size=%d, label.shape=%s, I.shape=%s'\
+        %(self.path,self.clmax,self.theta_dim,self.theta_range,self.size,self.samples.shape,self.I.shape)
     def __del__(self):
         del self.clmax
         del self.theta_dim

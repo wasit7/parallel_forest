@@ -26,9 +26,11 @@ class master:
         #self.eng=engine()
         print("master>> init engine")
         self.dview.execute('from %s import dataset'%dsetname)
-        self.dview.execute('dset=dataset()')
+        for i,dv in enumerate(self.clients):
+            dv.execute('dset=dataset(%d)'%(i))
         self.dview.execute('from scengine import engine')
         self.dview.execute('eng=engine(dset)')
+        print "debug:master:__init__: %s"%self.dview.gather('dset.path')
 #dont need to gather
 #        print("master>> gather engines")        
 #        self.engs=self.dview.gather('eng')
