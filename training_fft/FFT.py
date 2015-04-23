@@ -171,7 +171,7 @@ if __name__ == '__main__':
             print '%02d-%d %s'%(i,j,xfiles[0])
             #print xfiles[0],xfiles[1]
 
-            crop_image(xfiles[0],xfiles[1])
+           
             sub_img , sub_cs = crop_image(xfiles[0],xfiles[1])
             for x in xrange(samples) :
                 temp1 = sub_img.pop()
@@ -182,7 +182,7 @@ if __name__ == '__main__':
         
         V = np.array(sub_images,dtype=np.float32)
         C = np.array(sub_class,dtype=np.uint32)
-        C[C==255]=clmax
+        C[C==255]=clmax-1
         pickleFile = open('dataset%02d.pic'%(k), 'wb')
         pickle.dump((clmax,theta_dim,wd,len(C),C,V), pickleFile, pickle.HIGHEST_PROTOCOL)
 
