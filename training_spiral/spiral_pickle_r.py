@@ -17,7 +17,7 @@ I: the input data
 '''
 
 print 'Loading the input file'
-pickleFile = open('spiral.pic', 'rb')
+pickleFile = open('dataset00.pic', 'rb')
 clmax,theta_dim,theta_range,size,samples,I = pickle.load(pickleFile)
 pickleFile.close()
 

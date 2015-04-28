@@ -27,8 +27,8 @@ samples = 5 #sample is count of sub_file
 i = 0
 wd = 20 #wd-theta_range is level of the dimention vector
 clmax = 11 #clmax is amount of class
-dfiles = 20 #dfile is amount of image in 1 dataset
-dset = 4 #dset is amount of dataset
+dfiles = 1 #dfile is amount of image in 1 dataset
+dset = 1 #dset is amount of dataset
 #theta_range = 30 #theta_range is level of the dimention vector
 theta_dim = 1
 
@@ -105,28 +105,35 @@ def getVector(im_file):
     return fsg
 
 
-def crop_image(im_file,cs_file):
+def crop_image(im_file):
     sub_img = []
     sub_cs = []
     img = Image.open(im_file).convert('L')
-    cs = Image.open(cs_file).convert('L')
+    #cs = Image.open(cs_file).convert('L')
     w , h = img.size
-    for i in xrange(samples):       
-        rmax = np.random.randint(0, h-bs)
-        cmax = np.random.randint(0, w-bs)
-        box = (cmax, rmax, cmax + bs, rmax + bs)
-        output_img = img.crop(box)
-        output_cs = cs.crop(box)
-
-        u = getVector(output_img)
-        sub_img.append(u)
-        
-        pixels = output_cs.load()
-        rols , cols = output_cs.size
-        for x in range(rols/2):
-            for y in range(cols/2):
-                output_class = pixels[x, y]    
-        sub_cs.append(output_class)
+    cs = np.zeros( (h,w), dtype=np.uint8)
+    cs[:] = [0]
+    bb=bs//2
+#    for i in xrange(samples):       
+#        r = np.random.randint(bb, h-bb)
+#        c = np.random.randint(bb, w-bb)
+    print "w-bb:" ,w-bb
+    for r in xrange(bb,h-bb,bs):
+        for c in xrange(bb,w-bb,bs):
+            box = (c-bb, r-bb, c + bb, r + bb)
+            output_img = img.crop(box)
+    #        output_cs = cs.crop(box)
+            print "(r,c):(%d,%d)"%(r,c)
+            sub_img.append(getVector(output_img))
+            
+    #        pixels = output_cs.load()
+    #        rols , cols = output_cs.size
+    #        for x in range(rols/2):
+    #            for y in range(cols/2):
+    #                output_class = pixels[x, y]   
+            
+            #pixels = cs.load()
+            sub_cs.append(cs[c,r])
     
     return sub_img, sub_cs
 
@@ -143,13 +150,16 @@ if __name__ == '__main__':
 
                     img_name = os.path.basename(os.path.join(root,f))
                     file_name = img_name.split(".")
+					#all_class.append(os.path.join(root , dstdir + file_name[0] + type_name))
+					
+			
 
                     # check image don't have file type 'bmp'
-                    if os.path.isfile(os.path.join(root , dstdir + file_name[0] + type_name)) == False:
-                        print "plese label" , root , img_name
-                        cross = 1
-                    else:
-                        all_class.append(os.path.join(root , dstdir + file_name[0] + type_name))
+                    #if os.path.isfile(os.path.join(root , dstdir + file_name[0] + type_name)) == False:
+                        #print "plese label" , root , img_name
+                        #cross = 1
+                    #else:
+                        #all_class.append(os.path.join(root , dstdir + file_name[0] + type_name))
     
 
     k=0
@@ -157,32 +167,34 @@ if __name__ == '__main__':
     for i in range (dset):
         xarray = [] # list of sub files(img,class)
         sub_images = []
-        sub_class = []
+        #sub_class = []
         sub_img = []
         sub_cs = []
-
-        xarray = random.sample(zip(all_images,all_class), dfiles)
+		#all_class.append()
+        xarray = random.sample(all_images, dfiles)
         for j in range (len(xarray)):
             if cross == 1:       
                 break
 
             xfiles = xarray.pop()
 
-            print '%02d-%d %s'%(i,j,xfiles[0])
+            print '%02d-%d %s'%(i,j,xfiles)
             #print xfiles[0],xfiles[1]
 
-           
-            sub_img , sub_cs = crop_image(xfiles[0],xfiles[1])
-            for x in xrange(samples) :
-                temp1 = sub_img.pop()
-                temp2 = sub_cs.pop()
-                sub_images.append(temp1)
-                sub_class.append(temp2)
+            #crop_image(xfiles[0],xfiles[1])
+#            sub_img , sub_cs = crop_image(xfiles[0],xfiles[1])
+#            for x in xrange(samples) :
+#                temp1 = sub_img.pop()
+#                temp2 = sub_cs.pop()
+#                sub_images.append(temp1)
+#                sub_class.append(temp2)
 
-        
+        #sub_images , sub_class = crop_image(xfiles[0],xfiles[1])
+        sub_images,sub_class  = crop_image(xfiles)
+
         V = np.array(sub_images,dtype=np.float32)
         C = np.array(sub_class,dtype=np.uint32)
-        C[C==255]=clmax-1
+        C[C==0]=clmax-1
         pickleFile = open('dataset%02d.pic'%(k), 'wb')
         pickle.dump((clmax,theta_dim,wd,len(C),C,V), pickleFile, pickle.HIGHEST_PROTOCOL)
 

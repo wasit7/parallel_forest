@@ -90,8 +90,10 @@ if __name__ == '__main__':
         print('Usage:main.py dsetname [optional: mode]')
         print(">>ipython main.py dsetname")
         rfile=train('dataset_pickle')
+        #print rfile #"0426_1711_51.pic"
+        
         t,dset=recall('dataset_pickle',rfile)
-        dset.show()
+        #dset.show()
     elif len(sys.argv) == 2:
         rfile=train(sys.argv[1])
         t,dset=recall(sys.argv[1],rfile)
