@@ -61,6 +61,8 @@ class dataset:
         self.path='training/dataset%02d.pic'%(self.index)    
         pickleFile = open(self.path, 'rb')
         self.clmax,self.theta_dim,self.theta_range,self.size,self.samples,self.I = pickle.load(pickleFile)
+        if self.samples is None:
+            self.samples=np.zeros(self.I.shape[0],dtype=np.uint32)
         pickleFile.close()                   
     def __str__(self):
         return 'datset_pickle: path=./"%s" cmax=%d, theta_dim=%d, theta_range=%d \n\
