@@ -83,8 +83,8 @@ class engine:
         att=len(all_taus)        
         QHs=np.zeros(att)
         for a in xrange(att):
-            bagL=self.bag[self.dset.getI(all_thetas[a,:],self.bag)<all_taus[a]]
-            bagR=self.bag[self.dset.getI(all_thetas[a,:],self.bag)>=all_taus[a]]
+            bagL=self.bag[self.dset.getI(all_thetas[:,a],self.bag)<all_taus[a]]
+            bagR=self.bag[self.dset.getI(all_thetas[:,a],self.bag)>=all_taus[a]]
             HL,QL=self.getH(bagL)            
             HR,QR=self.getH(bagR)
 #            print("engine>>bagL:{}".format(bagL))

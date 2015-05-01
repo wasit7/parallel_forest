@@ -14,59 +14,43 @@ import numpy as np
 import time
 import datetime
 import os
-
-
-
-class log:
-    def __init__(self,path=""):
-        self.initTime=time.time()
-        self.lastTime=self.initTime
-        if os.path.isfile(path):
-            self.log_file=open(path, 'w')
-        else:
-            self.log_file=open(path, 'a')
-    def __del__(self):
-        self.finished("__del__")
-        if self.log_file:
-            self.log_file.close()
-    def finished(self,processName="processName"):
-        t=time.time()
-        msg="[%7.2fs] [%7.2fs] {%s}"%(t-self.lastTime,t-self.initTime,processName)
-        self.log_file.write(msg+"\n")
-        self.lastTime=t
-        return msg
-    def current(self,msg=""):
-        self.log_file.write(datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')+"\t"+msg+"\n")
-
 def timestamp(ti=time.time()):
     tf=time.time()    
     print("    took: %.2f sec"%(tf-ti))
     return tf
-
 def train(dsetname='dataset_pickle'):
-    global mylog
-    mylog.current("train")
+    ts=time.time()
+    strtime=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    print("Starting time: "+strtime)
+    print("----main::train>> init dset, dsetname: {}".format(dsetname))
     #training
     m=master(dsetname)
-    mylog.finished("main::train>> m=master(dsetname)\nmaster: %s"%m)   
+    ts=timestamp(ts)
+        
+    print("----main::train>> m.reset()")   
     m.reset()
-    print(mylog.finished("main::train>> m.reset()"))
+    ts=timestamp(ts)
     
     #print("main>>H,Q:".format(m.reset()))
-    m.train(uniquename)     
-    print(mylog.finished("main::train>> m.train(uniquename)"))
+    print("----main::train>>m.trian()")
+    strtime=datetime.datetime.fromtimestamp(ts).strftime('%m%d_%H%M_%S')
+    m.train(strtime)     
+    ts=timestamp(ts)
     #recording the tree pickle file
-
-    tree_file=os.path.join(path,uniquename+'.pic')
-    pickleFile = open(tree_file, 'wb') 
+    print("----main::train>>recording")
+    path=dsetname
+    if not os.path.exists(path):
+        os.makedirs(path)
+    rfile=path+strtime+'.pic'
+    pickleFile = open(rfile, 'wb')
     pickle.dump(m.root, pickleFile, pickle.HIGHEST_PROTOCOL)
     pickleFile.close()
-    print(mylog.finished("main::train>> recording tree"))
-    return tree_file
+    return rfile
 
 def recall(dsetname='dataset_pickle', rfile=''):
-    global mylog
-    mylog.current("recall")
+    ts=time.time()
+    strtime=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    print("Starting time: "+strtime)
     
     #reading the tree pickle file
     pickleFile = open(rfile, 'rb')
@@ -75,13 +59,12 @@ def recall(dsetname='dataset_pickle', rfile=''):
     #init the test tree
     t=tree()
     t.settree(root)
-    print(mylog.finished("main::train>> loading tree"))
+    print("----main::recall::loadtree") 
+    ts=timestamp(ts)
     
     #compute recall rate
     loader= imp.load_source('dataset', dsetname+'.py')
     dset=loader.dataset()
-    print(mylog.finished("main::train>> loading dset\ndataset: %s"%dset))
-
     correct=0;
     for x in xrange(dset.size):
         cL=dset.getL(x)#cL:correct label
@@ -95,34 +78,25 @@ def recall(dsetname='dataset_pickle', rfile=''):
         
         if  cL== L:
             correct=correct+1
- #       print("\n%03d: correct L"%cL)
- #       for i in xrange(len(ids)):
- #           print("%03d_%03d"%(ids[i],100*p[ids[i]])),
+        print("\n%03d: correct L"%cL)
+        for i in xrange(len(ids)):
+            print("%03d_%03d"%(ids[i],100*p[ids[i]])),
 
         dset.setL(x,L)
-    print(mylog.finished("main::train>> classifying\nrecall rate: {}%".format(correct/float(dset.size)*100)))
-
+    print("recall rate: {}%".format(correct/float(dset.size)*100))
+    print("----main::recall::evaluate") 
+    ts=timestamp(ts)
     return t, dset
 
-mylog=None
+    
 if __name__ == '__main__':
-    global mylog
     if len(sys.argv) < 2:
-        ##init log file
-        dsetname='dataset_pickle'
-        uniquename=datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
-        path=dsetname
-        if not os.path.exists(path):
-            os.makedirs(path)
-        mylog=log(os.path.join(path,uniquename+'.log'))
-        
-        ##training and recall
         print('Usage:main.py dsetname [optional: mode]')
         print(">>ipython main.py dsetname")
-        tree_file=train(dsetname)
+        rfile=train('dataset_pickle')
         #print rfile #"0426_1711_51.pic"
         
-        t,dset=recall('dataset_pickle',tree_file)
+        t,dset=recall('dataset_pickle',rfile)
         #dset.show()
     elif len(sys.argv) == 2:
         rfile=train(sys.argv[1])

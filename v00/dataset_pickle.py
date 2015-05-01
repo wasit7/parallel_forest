@@ -65,8 +65,8 @@ class dataset:
             self.samples=np.zeros(self.I.shape[0],dtype=np.uint32)
         pickleFile.close()                   
     def __str__(self):
-        return '\tdatset_pickle: path=./"%s" cmax=%d, theta_dim=%d, theta_range=%d \n\
-        \tsize=%d, label.shape=%s, I.shape=%s'\
+        return 'datset_pickle: path=./"%s" cmax=%d, theta_dim=%d, theta_range=%d \n\
+        size=%d, label.shape=%s, I.shape=%s'\
         %(self.path,self.clmax,self.theta_dim,self.theta_range,self.size,self.samples.shape,self.I.shape)
     def __del__(self):
         del self.clmax
@@ -137,7 +137,7 @@ class dataset:
 ##need to check
         f=np.zeros(len(x))
         for i in xrange(len(x)):
-            f[i]=self.I[x[i],thetas[i,0]]
+            f[i]=self.I[x[i],thetas[0,i]]
         return f
         
     def getI(self,theta,x):
@@ -175,12 +175,12 @@ class dataset:
         input:
             x: [1D ndarray dtype=np.uint32]
         output:
-            thetas: [2D ndarray float] rmax=len(x), cmax=theta_dim
+            thetas: [2D ndarray float] rmax=theta_dim, cmax=len(x)
             taus: [1D ndarray dtype=np.uint32]
         Description:
             In spiral case, it uses only first row of the thetas
         '''
-        #3 self.theta_dim: [0_r1, 1_c1, 2_r2, 3_c2, 4_bin]
+        #3 self.theta_dim: [0_r1, 1_c1, 2_r2, 3_c2, 4_bin]^T
         #6 self.samples: samples[x]=[0_class, 1_img, 2_row, 3_column]^T
         
         n_proposal=100     
@@ -192,8 +192,8 @@ class dataset:
         #hy=np.random.randint(8,mrec,size=len(x))
         #bins=np.random.randint(0,self.dim_bin,size=len(x))
         
-        thetas=np.zeros((len(x),self.theta_dim))
-        thetas[:,0]=np.random.randint(0,self.theta_range,size=len(x))
+        thetas=np.zeros((self.theta_dim,len(x)))
+        thetas[0,:]=np.random.randint(0,self.theta_range,size=len(x))
         thetas.astype(int)
         taus = self.getIs(thetas, x)
         return thetas,taus

@@ -31,9 +31,7 @@ class master:
             dv.execute('dset=dataset(%d)'%(i))
         self.dview.execute('from scengine import engine')
         self.dview.execute('eng=engine(dset)')
-        self.engines_path=self.dview.gather('dset.path')
-        print "debug:master:__init__: %s"%self.engines_path
-
+        print "debug:master:__init__: %s"%self.dview.gather('dset.path')
 #dont need to gather
 #        print("master>> gather engines")        
 #        self.engs=self.dview.gather('eng')
@@ -46,11 +44,6 @@ class master:
         self.queue=None
         self.root=None
         self.node=None
-    def __str__(self):
-        paths=""
-        for p in self.engines_path:
-            paths=paths+"\n\t\t"+p
-        return "\tminbagsize:%d maxdepth:%d engines_path:%s"%(self.minbagsize,self.maxdepth,paths)
     def __del__(self):
         pass
     def reset(self):
@@ -104,15 +97,12 @@ class master:
         print("master:search() collect_thetas_taus")
         #thetas,taus=self.eng.getParam()
         self.dview.execute('thetas,taus=eng.getParam()')
-        #thetas=self.dview['thetas']
-        #taus=self.dview['taus']
-
+        thetas=self.dview['thetas']
+        taus=self.dview['taus']
         
         #mearge_thetas_taus
-        #all_thetas=np.concatenate(thetas,axis=1)
-        #all_taus=np.concatenate(taus,axis=1)
-        all_thetas=self.dview.gather('thetas')
-        all_taus=self.dview.gather('taus')
+        all_thetas=np.concatenate(thetas,axis=1)
+        all_taus=np.concatenate(taus,axis=1)
 #engine compute ensemble entropy
         print("master:search() compute entropy")
         #QH,Q=self.eng.getQH(all_thetas,all_taus)
@@ -138,7 +128,7 @@ class master:
             return
 #engine split
         print("master:search() engine split")
-        best_theta=all_thetas[bgi,:]
+        best_theta=all_thetas[:,bgi]
         best_tau=all_taus[bgi]
         self.dview['best_theta']=best_theta
         self.dview['best_tau']=best_tau
@@ -162,7 +152,7 @@ class master:
         self.queue.append(self.node.L)        
         self.queue.append(self.node.R)
         
-        self.node.theta=all_thetas[bgi,:]
+        self.node.theta=all_thetas[:,bgi]
         self.node.tau=all_taus[bgi]
         self.node.char=self.node.char+'-'        
         

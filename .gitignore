@@ -57,4 +57,5 @@ docs/_build/
 target/
 
 #local project
+*.pickle
 dataset_pickle/
