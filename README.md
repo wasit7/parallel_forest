@@ -1,4 +1,4 @@
-# parallel_leaf v0.0
+# parallel_forest v0.0
 Ensemble learning on IPython.parallel. The codes are under developing state and constantly updated, please check the update if you get any error :). Please fill free to write the [wiki])(https://github.com/wasit7/parallel_forest/wiki).
 ## Requirements
 You just need [IPython.parallel] (http://ipython.org/ipython-doc/dev/parallel/)
