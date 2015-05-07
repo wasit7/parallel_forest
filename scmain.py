@@ -43,8 +43,7 @@ def timestamp(ti=time.time()):
     print("    took: %.2f sec"%(tf-ti))
     return tf
 
-def train(dsetname='dataset_pickle'):
-    global mylog
+def train(dsetname='dataset_pickle',mylog=None):
     mylog.current("train")
     #training
     m=master(dsetname)
@@ -64,8 +63,7 @@ def train(dsetname='dataset_pickle'):
     print(mylog.finished("main::train>> recording tree"))
     return tree_file
 
-def recall(dsetname='dataset_pickle', rfile=''):
-    global mylog
+def recall(dsetname='dataset_pickle', rfile='',mylog=None):
     mylog.current("recall")
     
     #reading the tree pickle file
@@ -104,9 +102,7 @@ def recall(dsetname='dataset_pickle', rfile=''):
 
     return t, dset
 
-mylog=None
 if __name__ == '__main__':
-    global mylog
     if len(sys.argv) < 2:
         ##init log file
         dsetname='dataset_pickle'
@@ -119,10 +115,10 @@ if __name__ == '__main__':
         ##training and recall
         print('Usage:main.py dsetname [optional: mode]')
         print(">>ipython main.py dsetname")
-        tree_file=train(dsetname)
+        tree_file=train(dsetname,mylog)
         #print rfile #"0426_1711_51.pic"
         
-        t,dset=recall('dataset_pickle',tree_file)
+        t,dset=recall('dataset_pickle',tree_file,mylog)
         #dset.show()
     elif len(sys.argv) == 2:
         rfile=train(sys.argv[1])

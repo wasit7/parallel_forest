@@ -221,7 +221,7 @@ if __name__ == '__main__':
     m.train()
     
     import pickle
-    pickleFile = open('root.pickle', 'wb')
+    pickleFile = open('root.pic', 'wb')
     pickle.dump(m.root, pickleFile, pickle.HIGHEST_PROTOCOL)
     pickleFile.close()
 

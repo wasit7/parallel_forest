@@ -50,12 +50,14 @@ class tree(mnode):
             L [integer] label
         '''
         return np.argmax(self.getP(x,dset))
+    def show(self):
+        print self.table()
 
 if __name__ == '__main__':
     import pickle
-    from matplotlib import pyplot as plt      
-    from ss10001 import dataset
-    from scmaster import master
+    #from matplotlib import pyplot as plt      
+    #from ss10001 import dataset
+    #from scmaster import master
 #    #training
 #    m=master()
 #    m.reset()
@@ -67,23 +69,23 @@ if __name__ == '__main__':
 #    pickleFile.close()
     
     #reading the tree pickle file    
-    pickleFile = open('out/root.pic', 'rb')
+    pickleFile = open('root.pic', 'rb')
     root = pickle.load(pickleFile)
     pickleFile.close()
     
     #init the test tree
     t=tree()
     t.settree(root)
-    
+    t.show()
     #compute recall rate
-    dset=dataset()
-    correct=0;
-    for x in xrange(dset.size):
-        L=t.getL(np.array([x]),dset)
-        if dset.getL(x) == L:
-            correct=correct+1
-        dset.setL(x,L)
-    print("recall rate: {}%".format(correct/float(dset.size)*100))
+    #dset=dataset()
+    #correct=0;
+    #for x in xrange(dset.size):
+    #    L=t.getL(np.array([x]),dset)
+    #    if dset.getL(x) == L:
+    #        correct=correct+1
+    #    dset.setL(x,L)
+    #print("recall rate: {}%".format(correct/float(dset.size)*100))
 
 
 #        

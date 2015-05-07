@@ -9,14 +9,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pickle
 import os
-clmax=8
+clmax=5
 spc=10
 theta_range=2
 samples=np.zeros(spc*clmax,dtype=np.uint32)
 I=np.zeros((spc*clmax,theta_range),dtype=np.float32)
 mark_sym=['*','+','.','|','x','^','s','o']
 mark_colr=['r','g','b','k']
-N=8 #number of datasets being generated
+N=1 #number of datasets being generated
 path="spc%05d/"%spc
 if not os.path.exists(path):
     os.makedirs(path)
