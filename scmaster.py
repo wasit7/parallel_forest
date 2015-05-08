@@ -11,6 +11,7 @@ import numpy as np
 from IPython import parallel
 class master:
     def __init__(self,dsetname='dataset_pickle'):
+        n_proposal=10000
         self.dsetname=dsetname
         print("master>>init() dsetname: {}".format(dsetname))
 #creat dview
@@ -23,12 +24,13 @@ class master:
         self.dview = self.clients.direct_view(self.clients.ids[0:])
         self.dview.block = True
 #engine init
-        #self.dview.execute('os.chdir(%s)'%os.getcwd())
+        self.dview.execute('import os; os.chdir("%s")'%os.getcwd())
         #self.eng=engine()
         print("master>> init engine")
         self.dview.execute('from %s import dataset'%dsetname)
         for i,dv in enumerate(self.clients):
-            dv.execute('dset=dataset(%d)'%(i))
+            dv.execute('dset=dataset(%d,%d)'\
+            %(i,n_proposal//len(self.clients.ids)))
         self.dview.execute('from scengine import engine')
         self.dview.execute('eng=engine(dset)')
         self.engines_path=self.dview.gather('dset.path')

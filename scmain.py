@@ -120,6 +120,7 @@ if __name__ == '__main__':
         
         t,dset=recall('dataset_pickle',tree_file,mylog)
         #dset.show()
+        del mylog
     elif len(sys.argv) == 2:
         rfile=train(sys.argv[1])
         t,dset=recall(sys.argv[1],rfile)

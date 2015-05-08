@@ -22,7 +22,7 @@ except ImportError:
 #mtran=64
 #margin=mrec+mtran
 class dataset:
-    def __init__(self,index=0):
+    def __init__(self,index=0,n_proposal=100):
         '''
         To create and initialise        
         self.dimtheta--(m)dimension of theta. theta is a column vector
@@ -57,12 +57,14 @@ class dataset:
         # L3(r2c1)----L4(r2c2)
         '''
         import pickle
+        self.n_proposal=n_proposal
         self.index=index
         self.path='training/dataset%02d.pic'%(self.index)
         pickleFile = open(self.path, 'rb')
         self.clmax,self.theta_dim,self.theta_range,self.size,self.samples,self.I = pickle.load(pickleFile)
         if self.samples is None:
-            self.samples=np.zeros(self.I.shape[0],dtype=np.uint32)
+            self.samples=np.zeros(self.I.shape[0])
+        self.samples.astype(np.uint8)
         pickleFile.close()                   
     def __str__(self):
         return '\tdatset_pickle: path=./"%s" cmax=%d, theta_dim=%d, theta_range=%d \n\
@@ -183,9 +185,13 @@ class dataset:
         #3 self.theta_dim: [0_r1, 1_c1, 2_r2, 3_c2, 4_bin]
         #6 self.samples: samples[x]=[0_class, 1_img, 2_row, 3_column]^T
         
-        n_proposal=100     
-        if len(x)>n_proposal:
-            x=np.random.permutation(x)[:n_proposal]
+#        N=len(x)//1 #divided by minbagsize  
+        N=len(x)
+        if N>self.n_proposal:
+            x=np.random.permutation(x)[:self.n_proposal]
+#        else:
+#            x=np.random.permutation(x)[:N]
+#        print x
         #ux=np.random.randint(-mtran,mtran,size=len(x))
         #uy=np.random.randint(-mtran,mtran,size=len(x))
         #hx=np.random.randint(8,mrec,size=len(x))
