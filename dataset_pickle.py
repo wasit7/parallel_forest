@@ -61,7 +61,7 @@ class dataset:
         self.index=index
         self.path='training/dataset%02d.pic'%(self.index)
         pickleFile = open(self.path, 'rb')
-        self.clmax,self.theta_dim,self.theta_range,self.size,self.samples,self.I = pickle.load(pickleFile)
+        self.clmax,self.theta_dim,self.theta_range,self.size,self.samples,self.I,pos = pickle.load(pickleFile)
         if self.samples is None:
             self.samples=np.zeros(self.I.shape[0])
         self.samples.astype(np.uint8)
