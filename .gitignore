@@ -58,5 +58,7 @@ target/
 
 #local project
 *.pickle
-#dataset_pickle/
 *.pic
+dataset_pickle/
+training/
+
