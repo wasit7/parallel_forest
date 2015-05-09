@@ -21,13 +21,13 @@ class master:
         self.clients.block = True
         #0 use master as engine
         #1 donot use master as engine
-        self.dview = self.clients.direct_view(self.clients.ids[2:])
+        self.dview = self.clients.direct_view(self.clients.ids[0:])
         self.dview.block = True
 #engine init
         self.dview.execute('import os; os.chdir("%s")'%os.getcwd())
         #self.eng=engine()
         print("master>> init engine")
-        self.dview.execute('from %s import dataset'%dsetname)
+        self.dview.execute('from %s import dataset'%(dsetname))
         for i,dv in enumerate(self.clients):
             dv.execute('dset=dataset(%d,%d)'\
             %(i,n_proposal//len(self.clients.ids)))

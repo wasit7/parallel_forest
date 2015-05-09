@@ -79,7 +79,7 @@ def recall(dsetname='dataset_pickle', rfile='',mylog=None):
     loader= imp.load_source('dataset', dsetname+'.py')
     dset=loader.dataset()
     print(mylog.finished("main::train>> loading dset\ndataset: %s"%dset))
-
+    conf=np.zeros((dset.clmax,dset.clmax)) 
     correct=0;
     for x in xrange(dset.size):
         cL=dset.getL(x)#cL:correct label
@@ -93,13 +93,14 @@ def recall(dsetname='dataset_pickle', rfile='',mylog=None):
         
         if  cL== L:
             correct=correct+1
+        conf[L,cL]=conf[L,cL]+1
  #       print("\n%03d: correct L"%cL)
  #       for i in xrange(len(ids)):
  #           print("%03d_%03d"%(ids[i],100*p[ids[i]])),
 
         dset.setL(x,L)
     print(mylog.finished("main::train>> classifying\nrecall rate: {}%".format(correct/float(dset.size)*100)))
-
+    print(mylog.finished("main::train>> classifying\nconfusion matrix: \n{}".format(conf)))
     return t, dset
 
 if __name__ == '__main__':
