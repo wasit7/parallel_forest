@@ -198,6 +198,7 @@ class mnode:
         del self.L
         del self.R
         del self.char
+        del self.Q
     def table(self):
         text = self.__repr__()+'\n'
         if self.L is not None:

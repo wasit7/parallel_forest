@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 import pickle
 import os
 clmax=5
-spc=1000000
+spc=10
 theta_range=2
 samples=np.zeros(spc*clmax,dtype=np.uint32)
 I=np.zeros((spc*clmax,theta_range),dtype=np.float32)
@@ -37,5 +37,5 @@ for n in xrange(N):
     with open(path+'dataset%02d.pic'%(n), 'wb') as pickleFile:
     #write label and feature vector
         theta_dim=1
-        pickle.dump((clmax,theta_dim,theta_range,len(samples),samples,I), pickleFile, pickle.HIGHEST_PROTOCOL)
+        pickle.dump((clmax,theta_dim,theta_range,len(samples),samples,I,None), pickleFile, pickle.HIGHEST_PROTOCOL)
     pickleFile.close()
