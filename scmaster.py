@@ -11,7 +11,7 @@ import numpy as np
 from IPython import parallel
 class master:
     def __init__(self,dsetname='dataset_pickle'):
-        n_proposal=10000
+        n_proposal=50
         self.dsetname=dsetname
         print("master>>init() dsetname: {}".format(dsetname))
 #creat dview
@@ -42,7 +42,7 @@ class master:
 #        print("master>>engs:\n{}".format(self.engs))
 #init local variables
         print("master>> init local variables")         
-        self.minbagsize=2
+        self.minbagsize=n_proposal
         self.maxdepth=20
         #self.maxdepth=10        
         self.queue=None
@@ -215,7 +215,7 @@ class mnode:
             string='%s %02d H:%.3e,Q:%06d (cl,P):(%03d,%.2f) (%03d,%.2f) (%03d,%.2f)' % (
             self.char,self.depth,self.H,self.Q,ids[0],self.P[ids[0]],ids[1],self.P[ids[1]],ids[2],self.P[ids[2]])
         else:
-            string='%s %02d H:%.3e,Q:%06d tau:%s' % (self.char,self.depth,self.H,self.Q,self.tau)
+            string='%s %02d H:%.3e,Q:%06d tau:%s theta:%s' % (self.char,self.depth,self.H,self.Q,self.tau,self.theta)
         return string
 
 if __name__ == '__main__':

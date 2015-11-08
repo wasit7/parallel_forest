@@ -23,6 +23,14 @@ class tree(mnode):
             self.L.settree(root.L)
             self.R=tree()  #mnode
             self.R.settree(root.R)
+    def classify(self,Ix):
+        if self.tau is None:#reaching terminal node
+            return self.P
+        else:
+            if(Ix[self.theta]<self.tau):
+                return self.L.classify(Ix)
+            else:
+                return self.R.classify(Ix)
     def getP(self,x,dset):
         '''
         input:

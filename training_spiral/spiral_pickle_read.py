@@ -18,7 +18,7 @@ I: the input data
 
 print 'Loading the input file'
 pickleFile = open('dataset00.pic', 'rb')
-clmax,theta_dim,theta_range,size,samples,I = pickle.load(pickleFile)
+clmax,theta_dim,theta_range,size,samples,I,unused_pos = pickle.load(pickleFile)
 pickleFile.close()
 
 print 'Drawing the graph'
