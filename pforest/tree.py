@@ -130,7 +130,7 @@ if __name__ == '__main__':
     plt.close('all')
     plt.axis([-1,1,-1,1])
     plt.pcolor(x,y,L)
-    plt.show()
+#    plt.show()
     
     #overlaying new input data
     plt.hold(True)
@@ -140,7 +140,7 @@ if __name__ == '__main__':
     z=np.random.randint(0,dset.size,1000)
     for i in z:
         plt.plot(dset2.I[i,0],dset2.I[i,1],marker[dset2.samples[i]])
-    
+    plt.show()
     
     
     

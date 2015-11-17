@@ -44,7 +44,7 @@ def gen_data():
 
 def train():
     from pforest.master import master
-    m=master.master()
+    m=master()
     m.reset()
     m.train()
     
@@ -58,6 +58,7 @@ def show_result():
     import pickle
     from matplotlib import pyplot as plt      
     from pforest.dataset import dataset
+    from pforest.tree import tree
       
     pickleFile = open('out_tree.pic', 'rb')
     root = pickle.load(pickleFile)
