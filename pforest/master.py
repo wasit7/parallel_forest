@@ -30,7 +30,7 @@ class master:
         try:
             __import__('imp').find_module('pforest')
             print "Found pforest"
-            self.dview.execute('from pforest import dataset')
+            self.dview.execute('from pforest.dataset import dataset')
         except ImportError:
             print "Not found pforest. Importing local modules"        
             self.dview.execute('from %s import dataset'%(dsetname))

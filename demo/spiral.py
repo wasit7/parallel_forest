@@ -43,7 +43,7 @@ def gen_data():
             pickle.dump((clmax,theta_dim,theta_range,len(samples),samples,I,None), pickleFile, pickle.HIGHEST_PROTOCOL)
 
 def train():
-    from pforest import master
+    from pforest.master import master
     m=master.master()
     m.reset()
     m.train()
@@ -57,7 +57,7 @@ def train():
 def show_result():
     import pickle
     from matplotlib import pyplot as plt      
-    from pforest import dataset
+    from pforest.dataset import dataset
       
     pickleFile = open('out_tree.pic', 'rb')
     root = pickle.load(pickleFile)
