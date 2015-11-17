@@ -5,8 +5,17 @@ Created on Thu Oct 16 17:33:47 2014
 
 @author: Wasit
 """
-from master import mnode
+
 import numpy as np
+
+
+try:
+        __import__('imp').find_module('pforest')
+        print "Found pforest"
+        from pforest.master import mnode
+    except ImportError:
+        print "Not found pforest. Importing local modules"        
+        from master import mnode
 
 class tree(mnode):    
     def settree(self,root=mnode(0,0,0)):
@@ -67,7 +76,7 @@ if __name__ == '__main__':
     try:
         __import__('imp').find_module('pforest')
         print "Found pforest"
-        from pforest import dataset
+        from pforest.dataset import dataset
     except ImportError:
         print "Not found pforest. Importing local modules"        
         from dataset import dataset
