@@ -31,14 +31,16 @@ class master:
             __import__('imp').find_module('pforest')
             print "Found pforest"
             self.dview.execute('from pforest.dataset import dataset')
+            self.dview.execute('from pforest.engine import engine')
         except ImportError:
             print "Not found pforest. Importing local modules"        
             self.dview.execute('from %s import dataset'%(dsetname))
+            self.dview.execute('from engine import engine')
         #self.dview.execute("reload(dataset)")
         for i,dv in enumerate(self.clients):
             dv.execute('dset=dataset(%d,%d)'\
             %(i,n_proposal//len(self.clients.ids)))
-        self.dview.execute('from engine import engine')
+        
         self.dview.execute('eng=engine(dset)')
         self.engines_path=self.dview.gather('dset.path')
         print "debug:master:__init__: %s"%self.engines_path
