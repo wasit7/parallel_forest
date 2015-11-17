@@ -27,7 +27,7 @@ class tree(mnode):
         if self.tau is None:#reaching terminal node
             return self.P
         else:
-            if(Ix[self.theta]<self.tau):
+            if(Ix[ int(self.theta) ]<self.tau):
                 return self.L.classify(Ix)
             else:
                 return self.R.classify(Ix)
@@ -63,8 +63,14 @@ class tree(mnode):
 
 if __name__ == '__main__':
     import pickle
-    #from matplotlib import pyplot as plt      
-    #from ss10001 import dataset
+    from matplotlib import pyplot as plt      
+    try:
+        __import__('imp').find_module('pforest')
+        print "Found pforest"
+        from pforest import dataset
+    except ImportError:
+        print "Not found pforest. Importing local modules"        
+        from dataset import dataset
     #from scmaster import master
 #    #training
 #    m=master()
@@ -86,45 +92,45 @@ if __name__ == '__main__':
     t.settree(root)
     t.show()
     #compute recall rate
-    #dset=dataset()
-    #correct=0;
-    #for x in xrange(dset.size):
-    #    L=t.getL(np.array([x]),dset)
-    #    if dset.getL(x) == L:
-    #        correct=correct+1
-    #    dset.setL(x,L)
-    #print("recall rate: {}%".format(correct/float(dset.size)*100))
+    dset=dataset()
+    correct=0;
+    for x in xrange(dset.size):
+        L=t.getL(np.array([x]),dset)
+        if dset.getL(x) == L:
+            correct=correct+1
+        dset.setL(x,L)
+    print("recall rate: {}%".format(correct/float(dset.size)*100))
 
 
-#        
-#    #setup the new test-set
-#    d=0.01
-#    y, x = np.mgrid[slice(-1, 1+d, d), slice(-1, 1+d, d)]
-#    #hack the dataset dont do this at home!        
-#    dset2=dataset()
-#    
-#    #start labeling
-#    
-#    
-#    L=np.zeros(x.shape,dtype=int)
-#    for r in xrange(x.shape[0]):
-#        for c in xrange(x.shape[1]):
-#            dset2.I[:,0]=np.array([ x[r,c],y[r,c] ])
-#            L[r,c]=t.getL(0,dset2)
-#    
-#    #plot the lalbel out put
-#    plt.close('all')
-#    plt.axis([-1,1,-1,1])
-#    plt.pcolor(x,y,L)
-#    plt.show()
-#    
-#    #overlaying new input data
-#    plt.hold(True)
-#    plt.set_cmap('jet')
-#    marker=['bo','co','go','ro','mo','yo','ko',
-#            'bs','cs','gs','rs','ms','ys','ks']
-#    for i in xrange(dset.size):
-#        plt.plot(dset2.I[0,i],dset2.I[1,i],marker[dset2.samples[0,i]])
+        
+    #setup the new test-set
+    d=0.01
+    y, x = np.mgrid[slice(-1, 1+d, d), slice(-1, 1+d, d)]
+    #create dataset       
+    dset2=dataset()
+    
+    #start labeling   
+    
+    L=np.zeros(x.shape,dtype=int)
+    for r in xrange(x.shape[0]):
+        for c in xrange(x.shape[1]):
+            Prob=t.classify(( x[r,c],y[r,c] ))
+            L[r,c]=np.argmax(Prob)
+    
+    #plot the lalbel out put
+    plt.close('all')
+    plt.axis([-1,1,-1,1])
+    plt.pcolor(x,y,L)
+    plt.show()
+    
+    #overlaying new input data
+    plt.hold(True)
+    plt.set_cmap('jet')
+    marker=['bo','co','go','ro','mo','yo','ko',
+            'bs','cs','gs','rs','ms','ys','ks']
+    z=np.random.randint(0,dset.size,1000)
+    for i in z:
+        plt.plot(dset2.I[i,0],dset2.I[i,1],marker[dset2.samples[i]])
     
     
     

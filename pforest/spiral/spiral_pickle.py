@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 import pickle
 import os
 clmax=5
-spc=1e2
+spc=1e3
 theta_range=2
 samples=np.zeros(spc*clmax,dtype=np.uint32)
 I=np.zeros((spc*clmax,theta_range),dtype=np.float32)
