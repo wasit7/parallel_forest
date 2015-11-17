@@ -10,7 +10,7 @@ import os
 import numpy as np
 from IPython import parallel
 class master:
-    def __init__(self,dsetname='dataset_pickle'):
+    def __init__(self,dsetname='dataset'):
         n_proposal=50
         self.dsetname=dsetname
         print("master>>init() dsetname: {}".format(dsetname))
