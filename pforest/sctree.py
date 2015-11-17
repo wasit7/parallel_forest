@@ -48,7 +48,17 @@ class tree(mnode):
                 return self.L.getP(x,dset)
             else:
                 return self.R.getP(x,dset)
-    
+    def getP2(self,x):
+        #print("test>>mnode:{}".format(self))
+        if self.tau is None:#reaching terminal node
+            return self.P
+        else:
+            #if (self.L is not None and goLeft) :
+            print self.theta
+            if (x[int(self.theta)]<self.tau) :
+                return self.L.getP2(x)
+            else:
+                return self.R.getP2(x)
     def getL(self,x,dset):
         '''
         input:
