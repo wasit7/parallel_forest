@@ -10,12 +10,12 @@ import numpy as np
 
 
 try:
-        __import__('imp').find_module('pforest')
-        print "Found pforest"
-        from pforest.master import mnode
-    except ImportError:
-        print "Not found pforest. Importing local modules"        
-        from master import mnode
+    __import__('imp').find_module('pforest')
+    print "Found pforest"
+    from pforest.master import mnode
+except ImportError:
+    print "Not found pforest. Importing local modules"        
+    from master import mnode
 
 class tree(mnode):    
     def settree(self,root=mnode(0,0,0)):
