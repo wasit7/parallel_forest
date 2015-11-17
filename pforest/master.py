@@ -27,7 +27,14 @@ class master:
         self.dview.execute('import os; os.chdir("%s")'%os.getcwd())
         #self.eng=engine()
         print("master>> init engine")
-        self.dview.execute('from %s import dataset'%(dsetname))
+        try:
+            __import__('imp').find_module('pforest')
+            print "Found pforest"
+            self.dview.execute('from pforest import dataset')
+        except ImportError:
+            print "Not found pforest. Importing local modules"        
+            self.dview.execute('from %s import dataset'%(dsetname))
+        #self.dview.execute("reload(dataset)")
         for i,dv in enumerate(self.clients):
             dv.execute('dset=dataset(%d,%d)'\
             %(i,n_proposal//len(self.clients.ids)))
@@ -88,8 +95,8 @@ class master:
         while 0<len(self.queue):
             self.pop()
             self.search()
-            
-            f1.write("{}\n".format(self.node))
+            print "master::train() node%d%s"%(self.node.depth,self.node.char)
+            #f1.write("{}\n".format(self.node))
             
             #print self.node
         f1.write('-'*21+'\n')
@@ -103,7 +110,7 @@ class master:
             self.terminate('D')                
             return
 #engine collect_thetas_taus
-        print("master:search() collect_thetas_taus")
+#print("master:search() collect_thetas_taus")
         #thetas,taus=self.eng.getParam()
         self.dview.execute('thetas,taus=eng.getParam()')
         #thetas=self.dview['thetas']
@@ -115,8 +122,8 @@ class master:
         #all_taus=np.concatenate(taus,axis=1)
         all_thetas=self.dview.gather('thetas')
         all_taus=self.dview.gather('taus')
-#engine compute ensemble entropy
-        print("master:search() compute entropy")
+##engine compute ensemble entropy
+#print("master:search() compute entropy")
         #QH,Q=self.eng.getQH(all_thetas,all_taus)
         self.dview['all_thetas']=all_thetas
         self.dview['all_taus']=all_taus
@@ -125,12 +132,12 @@ class master:
         Q=np.array(self.dview['Q'])#+np.finfo(np.float32).tiny
         
         #check bag size Q
-        print("master:search() check bag size")
+##print("master:search() check bag size")
         if np.max(Q)<self.minbagsize:
             self.terminate('Q')                
             return
-        #compute the entropy gain
-        print("master:search() compute entropy gain")
+##compute the entropy gain
+#print("master:search() compute entropy gain")
         gain=self.node.H-QH/(np.sum(Q))
         #find best gain index
         bgi = np.argmax(gain)
@@ -138,14 +145,14 @@ class master:
         if gain[bgi]<np.finfo(np.float32).tiny:
             self.terminate('G')                
             return
-#engine split
-        print("master:search() engine split")
+##engine split
+#print("master:search() engine split")
         best_theta=all_thetas[bgi,:]
         best_tau=all_taus[bgi]
         self.dview['best_theta']=best_theta
         self.dview['best_tau']=best_tau
         #print("best theta: {},tau: {}".format(best_theta,best_tau))
-        print("master:search() eng.split()")
+#print("master:search() eng.split()")
         self.dview.execute('HL,QL,HR,QR = eng.split(best_theta,best_tau)')
         HLs=np.array(self.dview['HL'])
         QLs=np.array(self.dview['QL'])
@@ -157,8 +164,8 @@ class master:
         
         HR=np.sum(HRs*QRs)/np.sum(QRs)
         QR=np.sum(QRs)
-        
-        print("master:search() append_nodes")
+## append_nodes        
+#print("master:search() append_nodes")
         self.node.L=mnode(self.node.depth-1,HL,QL,'L',self.node)
         self.node.R=mnode(self.node.depth-1,HR,QR,'R',self.node)
         self.queue.append(self.node.L)        
@@ -224,7 +231,7 @@ if __name__ == '__main__':
     m.train()
     
     import pickle
-    pickleFile = open('root.pic', 'wb')
+    pickleFile = open('out_tree.pic', 'wb')
     pickle.dump(m.root, pickleFile, pickle.HIGHEST_PROTOCOL)
     pickleFile.close()
 
