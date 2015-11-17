@@ -31,7 +31,7 @@ class master:
         for i,dv in enumerate(self.clients):
             dv.execute('dset=dataset(%d,%d)'\
             %(i,n_proposal//len(self.clients.ids)))
-        self.dview.execute('from scengine import engine')
+        self.dview.execute('from engine import engine')
         self.dview.execute('eng=engine(dset)')
         self.engines_path=self.dview.gather('dset.path')
         print "debug:master:__init__: %s"%self.engines_path

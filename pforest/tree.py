@@ -5,7 +5,7 @@ Created on Thu Oct 16 17:33:47 2014
 
 @author: Wasit
 """
-from scmaster import mnode
+from master import mnode
 import numpy as np
 
 class tree(mnode):    

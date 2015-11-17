@@ -7,8 +7,8 @@ Created on Mon Oct 13 18:50:34 2014
 """
 import sys
 import pickle
-from scmaster import master
-from sctree import tree
+from master import master
+from tree import tree
 import imp
 import numpy as np
 import time

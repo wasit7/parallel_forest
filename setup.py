@@ -8,6 +8,6 @@ setup(
   author_email = 'wasit7@gmail.com',
   url = 'https://github.com/wasit7/parallel_forest/pforest',
   download_url = 'https://github.com/wasit7/parallel_forest/pforest',
-  keywords = ['parallel', 'classifiers'], # arbitrary keywords
+  keywords = ['parallel', 'classifier'], # arbitrary keywords
   classifiers = [],
 )
