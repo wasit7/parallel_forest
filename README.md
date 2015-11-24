@@ -1,8 +1,10 @@
-# parallel_forest v0.0
+# parallel_forest v0.1
 Ensemble learning on IPython.parallel. The codes are under developing state and constantly updated, please check the update if you get any error :). Please fill free to write the [wiki])(https://github.com/wasit7/parallel_forest/wiki).
 ## Requirements
 You just need [IPython.parallel] (http://ipython.org/ipython-doc/dev/parallel/)
-## Setup
+## Sample
+Have a look in /nb and /demo .
+## Seprecated sample
 1. Creating the dataset
   * By **executing spiral_pickle.py** then the data is recorded into a pickle file. You have to rename the **spiral.pic** to **datasetXX.pic**, where [XX] is index of an engine you have to change the index according to the number of engine you have. For example, a number of engines is 8 the number [XX] are 00, 01, 02, ..., 07.
   * The recorded data may be loaded and verified by **executing spiral_pickle_r.py**

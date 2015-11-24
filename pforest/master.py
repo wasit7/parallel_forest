@@ -24,7 +24,7 @@ class master:
         self.dview = self.clients.direct_view(self.clients.ids[0:])
         self.dview.block = True
 #engine init
-        self.dview.execute('import os; os.chdir("%s")'%os.getcwd())
+        self.dview.execute("""import os; os.chdir(r'%s')"""%os.getcwd())
         #self.eng=engine()
         print("master>> init engine")
         try:
