@@ -1,9 +1,26 @@
 # parallel_forest v0.1
 Ensemble learning on IPython.parallel. The codes are under developing state and constantly updated, please check the update if you get any error :). Please fill free to write the [wiki](https://github.com/wasit7/parallel_forest/wiki).
 ## Requirements
-You just need [IPython.parallel] (http://ipython.org/ipython-doc/dev/parallel/)
+You need
+- [Python 2.7.x] (https://www.python.org/downloads/)
+- [IPython.parallel 3.2.3] (http://ipython.org/ipython-doc/dev/parallel/)
+- [numpy 1.10.4] (http://www.numpy.org/)
+- pyzmq 15.2.0
+
+To run demo, you need
+- matplotlib 1.5.1
+
+To use notebook file, you need
+- Jinja2 2.8
+- tornado 4.3
+- jsonschema 2.5.1
+- matplotlib 1.5.1
+
 ## Setup
-$python setup.py install
+    $ python setup.py install
+or simple install with pip at project's root directory
+
+    $ pip install .
 ## Sample
 Have a look in the [parallel_forest.ipynb](https://github.com/wasit7/parallel_forest/blob/master/nb/parallel%20forest.ipynb) 
 ## deprecated setup
