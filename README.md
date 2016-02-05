@@ -7,10 +7,10 @@ You need
 - [numpy 1.10.4] (http://www.numpy.org/)
 - pyzmq 15.2.0
 
-To run demo, you need
+To run [demo file] (https://github.com/wasit7/parallel_forest/blob/master/demo/spiral.py), this additional package is needed
 - matplotlib 1.5.1
 
-To use notebook file, you need
+To view [notebook file] (https://github.com/wasit7/parallel_forest/blob/master/nb/parallel%20forest.ipynb) locally, these additional packages are needed
 - Jinja2 2.8
 - tornado 4.3
 - jsonschema 2.5.1
@@ -18,11 +18,22 @@ To use notebook file, you need
 
 ## Setup
     $ python setup.py install
-or simple install with pip at project's root directory
+or install with pip by call the following command at project's root directory
 
     $ pip install .
+
+## Demo
+In order to run the [demo file] (https://github.com/wasit7/parallel_forest/blob/master/demo/spiral.py), you need to start the IPython's controller and engines. You can setup your own cluster or simply run the following command to start one controller and four engines at your computer
+
+    $ ipcluster start
+
+After that you can run the demo file by
+
+    $ cd demo
+    $ python spiral.py
 ## Sample
 Have a look in the [parallel_forest.ipynb](https://github.com/wasit7/parallel_forest/blob/master/nb/parallel%20forest.ipynb) 
+
 ## deprecated setup
 1. Creating the dataset
   * By **executing spiral_pickle.py** then the data is recorded into a pickle file. You have to rename the **spiral.pic** to **datasetXX.pic**, where [XX] is index of an engine you have to change the index according to the number of engine you have. For example, a number of engines is 8 the number [XX] are 00, 01, 02, ..., 07.
