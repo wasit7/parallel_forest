@@ -11,7 +11,7 @@ import numpy as np
 from IPython import parallel
 class master:
     def __init__(self,dsetname='dataset'):
-        n_proposal=50
+        n_proposal=100
         self.dsetname=dsetname
         print("master>>init() dsetname: {}".format(dsetname))
 #creat dview
@@ -51,7 +51,7 @@ class master:
 #        print("master>>engs:\n{}".format(self.engs))
 #init local variables
         print("master>> init local variables")         
-        self.minbagsize=n_proposal
+        self.minbagsize=2
         self.maxdepth=20
         #self.maxdepth=10        
         self.queue=None
