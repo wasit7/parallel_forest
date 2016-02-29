@@ -1,6 +1,7 @@
 """
-GNU GENERAL PUBLIC LICENSE Version 2
+The dataset for the pforest.
 
+GNU GENERAL PUBLIC LICENSE Version 2
 Created on Tue Oct 14 18:52:01 2014
 
 @author: Wasit
@@ -21,7 +22,12 @@ except ImportError:
 #mrec=64
 #mtran=64
 #margin=mrec+mtran
+
 class dataset:
+    """
+    A class that represent dataset of the pforest.
+    """
+
     def __init__(self,index=0,n_proposal=100):
         '''
         To create and initialise        
@@ -65,11 +71,19 @@ class dataset:
         if self.samples is None:
             self.samples=np.zeros(self.I.shape[0])
         self.samples.astype(np.uint8)
-        pickleFile.close()                   
+        pickleFile.close()
+
     def __str__(self):
+        """
+        Return string that describes the dataset.
+
+        Almost all attributes are included.
+        """
+
         return '\tdatset_pickle: path=./"%s" cmax=%d, theta_dim=%d, theta_range=%d \n\
         \tsize=%d, label.shape=%s, I.shape=%s'\
         %(self.path,self.clmax,self.theta_dim,self.theta_range,self.size,self.samples.shape,self.I.shape)
+
     def __del__(self):
         del self.clmax
         del self.theta_dim
@@ -78,12 +92,12 @@ class dataset:
         del self.samples#samples contains only label
         del self.I
     def getX(self):
-        '''
+        """
         input: 
             void
         output: 
             [1D ndarray dtype=np.uint32]
-        '''
+        """
         return np.random.permutation(self.size)
     def getL(self,x):
         '''
