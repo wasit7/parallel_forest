@@ -1,4 +1,6 @@
 """
+A tree module for pforest.
+
 GNU GENERAL PUBLIC LICENSE Version 2
 
 Created on Thu Oct 16 17:33:47 2014
@@ -17,8 +19,15 @@ except ImportError:
     print "Not found pforest. Importing local modules"        
     from master import mnode
 
-class tree(mnode):    
+class tree(mnode):
+    """
+    A tree class that represent the tree of the random forest.
+    """
+
     def settree(self,root=mnode(0,0,0)):
+        """
+        Initialize the tree with training result.
+        """
         self.theta=root.theta  #vector array
         self.tau=root.tau  #scalar
         self.H=root.H  #scalar
@@ -32,22 +41,29 @@ class tree(mnode):
             self.L.settree(root.L)
             self.R=tree()  #mnode
             self.R.settree(root.R)
+
     def classify(self,Ix):
-        if self.tau is None:#reaching terminal node
+        """
+        Classify input Ix by the decision tree.
+        """
+        if self.tau is None: #reaching terminal node
             return self.P
         else:
             if(Ix[ int(self.theta) ]<self.tau):
                 return self.L.classify(Ix)
             else:
                 return self.R.classify(Ix)
+
     def getP(self,x,dset):
-        '''
+        """
+        Return the probability.
+
         input:
             x sample index [int]
             dset the dataset object
         output:
             P [1d ndarray] probability P(L|Ix)
-        '''
+        """
         #print("test>>mnode:{}".format(self))
         if self.tau is None:#reaching terminal node
             return self.P
@@ -59,15 +75,17 @@ class tree(mnode):
                 return self.R.getP(x,dset)
    
     def getL(self,x,dset):
-        '''
+        """
         input:
             x sample index [int]
             dset the dataset object
         output:
             L [integer] label
-        '''
+        """
         return np.argmax(self.getP(x,dset))
+
     def show(self):
+        """Output this tree on standard output."""
         print self.table()
 
 if __name__ == '__main__':

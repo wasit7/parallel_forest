@@ -1,4 +1,6 @@
 """
+A master module for pforest.
+
 GNU GENERAL PUBLIC LICENSE Version 2
 
 Created on Mon Oct 13 18:50:34 2014
@@ -10,6 +12,16 @@ import os
 import numpy as np
 from IPython import parallel
 class master:
+    """
+    A class for master node of IPython parallel.
+
+    This class will handle the training process of the pforest.
+
+    It initilize the engine class on each IPython engine on
+    the cluster. It also controls the execution flow of the training
+    process, and makes decision on bag spliting.
+    """
+
     def __init__(self,dsetname='dataset'):
         n_proposal=100
         self.dsetname=dsetname
@@ -64,7 +76,14 @@ class master:
         return "\tminbagsize:%d maxdepth:%d engines_path:%s"%(self.minbagsize,self.maxdepth,paths)
     def __del__(self):
         pass
+
     def reset(self):
+        """
+        Reset the training process.
+
+        It will reset each engine across the cluster,
+        and also reinitialize tree's attributes.
+        """
 #engine reset        
         #H,Q = self.eng.reset()
         print("master>>reset()")
@@ -85,11 +104,20 @@ class master:
         print("master>>reset() Q: {:05d}".format(Q))
         
     def pop(self):
+        """
+        Pop a next bag in queue out to process.
+
+        This will call pop across the cluster.
+        """
 #engine pop
         #self.eng.pop()
         self.dview.execute('eng.pop()')
         self.node=self.queue.pop()
+
     def train(self,strtime='_time'):
+        """
+        Initiate the training process.
+        """
         if not os.path.exists(self.dsetname):
             os.makedirs(self.dsetname)
         f1=open(self.dsetname+'/'+strtime+'.out', 'a')
@@ -103,13 +131,23 @@ class master:
             #print self.node
         f1.write('-'*21+'\n')
         f1.close()
-        self.clients.purge_results('all')        
+        self.clients.purge_results('all')
         self.clients.purge_everything()
             
-    def search(self):        
+    def search(self):
+        """
+        Run a complete cycle for one bag in queue.
+
+        The cycle for a bag is start with finding the every possible theta
+        and tau from each engine in cluster. After that the final theta, and tau
+        is decided and send back to the engines to use to split the bag.
+        After bag spliting is complete, the new nodes are added to the queue for
+        processing later along the training process.
+        """
+        
         #check depth
         if self.node.depth<=1:
-            self.terminate('D')                
+            self.terminate('D')
             return
 #engine collect_thetas_taus
 #print("master:search() collect_thetas_taus")
@@ -136,7 +174,7 @@ class master:
         #check bag size Q
 ##print("master:search() check bag size")
         if np.max(Q)<self.minbagsize:
-            self.terminate('Q')                
+            self.terminate('Q')
             return
 ##compute the entropy gain
 #print("master:search() compute entropy gain")
@@ -145,7 +183,7 @@ class master:
         bgi = np.argmax(gain)
         #check gain
         if gain[bgi]<np.finfo(np.float32).tiny:
-            self.terminate('G')                
+            self.terminate('G')
             return
 ##engine split
 #print("master:search() engine split")
@@ -170,12 +208,12 @@ class master:
 #print("master:search() append_nodes")
         self.node.L=mnode(self.node.depth-1,HL,QL,'L',self.node)
         self.node.R=mnode(self.node.depth-1,HR,QR,'R',self.node)
-        self.queue.append(self.node.L)        
+        self.queue.append(self.node.L)
         self.queue.append(self.node.R)
         
         self.node.theta=all_thetas[bgi,:]
         self.node.tau=all_taus[bgi]
-        self.node.char=self.node.char+'-'        
+        self.node.char=self.node.char+'-'
         
     def terminate(self, code):
         self.node.char=self.node.char+code

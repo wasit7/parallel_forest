@@ -52,8 +52,6 @@ def train():
     pickle.dump(m.root, pickleFile, pickle.HIGHEST_PROTOCOL)
     pickleFile.close()
 
-
-
 def show_result():
     import pickle
     from matplotlib import pyplot as plt      

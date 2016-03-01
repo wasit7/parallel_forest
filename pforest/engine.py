@@ -1,10 +1,11 @@
 """
-The engine of the pforest
+The engine of the pforest.
 
 This module contain definition of the engine class that is
 use by the pforest.
 
 GNU GENERAL PUBLIC LICENSE Version 2
+
 Created on Mon Oct 13 18:56:19 2014
 
 @author: Wasit
@@ -50,7 +51,7 @@ class engine:
         return "        dset:{}[{}]\n".format(self.dset.__module__,self.dset.size)
 
     def pop(self):
-        """Pop the next bag to be manipulate out of the queue."""
+        """Pop the next bag to be calculate out of the queue."""
         self.bag=self.queue.pop()
         
     def reset(self):
@@ -127,7 +128,7 @@ class engine:
         for a in xrange(att):
             bagL=self.bag[self.dset.getI(all_thetas[a,:],self.bag)<all_taus[a]]
             bagR=self.bag[self.dset.getI(all_thetas[a,:],self.bag)>=all_taus[a]]
-            HL,QL=self.getH(bagL)            
+            HL,QL=self.getH(bagL)
             HR,QR=self.getH(bagR)
 #            print("engine>>bagL:{}".format(bagL))
 #            print("engine>>bagR:{}\n".format(bagR))
@@ -136,7 +137,7 @@ class engine:
         return QHs,len(self.bag)
         
     def split(self,theta,tau):
-        '''
+        """
         Splitting the current bag by the final theta and tau.
 
         After theta and tau are decided by the master node, the master
@@ -157,13 +158,13 @@ class engine:
             (HL,QL,HR,QR) [all  scalar]
         master passes theta and tau to this function 
         in order to split the current bag
-        '''
+        """
         bagL=self.bag[self.dset.getI(theta,self.bag)<tau]
         bagR=self.bag[self.dset.getI(theta,self.bag)>=tau]
         self.queue.append(bagL)
         self.queue.append(bagR)
 #        print("engine>>split()")
-        HL,QL=self.getH(bagL)            
+        HL,QL=self.getH(bagL)
         HR,QR=self.getH(bagR)
         
         return HL,QL,HR,QR

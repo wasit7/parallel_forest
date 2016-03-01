@@ -2,6 +2,7 @@
 The dataset for the pforest.
 
 GNU GENERAL PUBLIC LICENSE Version 2
+
 Created on Tue Oct 14 18:52:01 2014
 
 @author: Wasit
@@ -29,7 +30,7 @@ class dataset:
     """
 
     def __init__(self,index=0,n_proposal=100):
-        '''
+        """
         To create and initialise        
         self.dimtheta--(m)dimension of theta. theta is a column vector
         self.size------(n)number of samples in the root bag
@@ -38,18 +39,18 @@ class dataset:
                        where p is size of vector that identify location 
                        of a sample in self.I. 
                        Note that the fist row of self.sample is label
-        '''
+        """
         
         #1 self.cmax: maximum number of classes
         #2 self.spi: number of samples per image [removed]
-        #3 self.theta_dim: the number of elements in a theta (a number of parameter in theta)    
+        #3 self.theta_dim: the number of elements in a theta (a number of parameter in theta)
         #4 self.size: number of all samples in the root bag
         #5 self.I: the data
         #6 self.samples: samples[x]=[class]
         #7 self.theta_range: range of theta for generating value in getParam()
         '''
-        Example: In order to extract LBP feature, the possible setup is theta_dim=5 
-        when 4 dimensions is used to indicate the 2 corners of rectangular window. 
+        Example: In order to extract LBP feature, the possible setup is theta_dim=5
+        when 4 dimensions is used to indicate the 2 corners of rectangular window.
         The last dimension represent the bin of the LBP histogram.  
         Then we can set theta=[r1, c1, r2, c2, bin]^T
         In this particular case (|theta| = 5 ). The theta dimension is called "theta_dim"
@@ -93,38 +94,46 @@ class dataset:
         del self.I
     def getX(self):
         """
+        Return the indices of data in a dataset in randomized order.
+
         input: 
             void
         output: 
             [1D ndarray dtype=np.uint32]
         """
         return np.random.permutation(self.size)
+
     def getL(self,x):
-        '''
+        """
+        Return the label associated with indices x.
+
         input: 
             [1D ndarray dtype=np.uint32]
         output: 
             [1D ndarray dtype=np.uint32]
-        '''
+        """
         return self.samples[x]
+
     def setL(self,x,L):
-        '''
+        """
+        Set the label to associate with the indices x.
+
         input:
             x: [1D ndarray dtype=np.uint32]
             L: [1D ndarray dtype=np.uint32]
-        '''
+        """
         self.samples[x]=L
 ###here
     def getIs(self,thetas,x):
-        '''
+        """
         input:
-            x: [1D ndarray dtype=np.uint32]\n
             thetas: [2D ndarray float]
+            x: [1D ndarray dtype=np.uint32]
         output: 
             [1D ndarray dtype=float]
         Description:
             In spiral case, it uses only first row of the thetas
-        '''
+        """
         #dataset.getParam() calls this
         #theta and x have same number of column
         #3 self.theta_dim: [0_r1, 1_c1, 2_r2, 3_c2, 4_bin]^T
@@ -135,7 +144,7 @@ class dataset:
         #  |            |
         # L3(r2c1)----L4(r2c2)
     ##########
-        #6 self.samples: samples[x]=[0_class, 1_img, 2_row, 3_column]^T        
+        #6 self.samples: samples[x]=[0_class, 1_img, 2_row, 3_column]^T
 #        r1=self.samples[2,x]+thetas[0,:]
 #        c1=self.samples[3,x]+thetas[1,:]
 #        r2=self.samples[2,x]+thetas[2,:]
@@ -157,15 +166,15 @@ class dataset:
         return f
         
     def getI(self,theta,x):
-        '''
+        """
         input:
-            x: [1D ndarray dtype=np.uint32]\n
             theta: [1D ndarray float]
+            x: [1D ndarray dtype=np.uint32]
         output: 
             [1D ndarray dtype=float]
         Description:
             In spiral case, it uses only first row of the thetas
-        '''
+        """
         #engine.getQH() call this
 ##original        
 #        r1=self.samples[2,x]+theta[0]
@@ -187,15 +196,20 @@ class dataset:
         return f
         
     def getParam(self,x):
-        '''
+        """
+        Extract thetas and taus from a bag x.
+
+        This is called by the enigne an the results are gathered by
+        the master node.
+
         input:
-            x: [1D ndarray dtype=np.uint32]
+            x: [1D ndarray dtype=np.uint32] - A bag.
         output:
             thetas: [2D ndarray float] rmax=len(x), cmax=theta_dim
             taus: [1D ndarray dtype=np.uint32]
         Description:
             In spiral case, it uses only first row of the thetas
-        '''
+        """
         #3 self.theta_dim: [0_r1, 1_c1, 2_r2, 3_c2, 4_bin]
         #6 self.samples: samples[x]=[0_class, 1_img, 2_row, 3_column]^T
         
@@ -219,8 +233,10 @@ class dataset:
         return thetas,taus
     
     def show(self):
+        """Output the dataset to standard output."""
         #show dataset
         print self.samples
+
 if __name__ == '__main__':
 #    import matplotlib.pyplot as plt
     dset=dataset()
@@ -230,7 +246,7 @@ if __name__ == '__main__':
     
     
     
-#    print("number of images: {}".format(len(dset.I)))    
+#    print("number of images: {}".format(len(dset.I)))
 #    markers=['ko','ro','go','bo','po']
 #    for i in xrange(len(dset.jsonfiles)):
 #        f=open(dset.jsonfiles[i],"r")
