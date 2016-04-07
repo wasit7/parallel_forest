@@ -29,7 +29,7 @@ class dataset:
     A class that represent dataset of the pforest.
     """
 
-    def __init__(self,index=0,n_proposal=100):
+    def __init__(self,index=0,n_proposal=100,_prefix='train'):
         """
         To create and initialise        
         self.dimtheta--(m)dimension of theta. theta is a column vector
@@ -66,7 +66,7 @@ class dataset:
         import pickle
         self.n_proposal=n_proposal
         self.index=index
-        self.path='train/dataset%02d.pic'%(self.index)
+        self.path='%s/dataset%02d.pic'%(_prefix,self.index)
         pickleFile = open(self.path, 'rb')
         self.clmax,self.theta_dim,self.theta_range,self.size,self.samples,self.I,pos = pickle.load(pickleFile)
         if self.samples is None:

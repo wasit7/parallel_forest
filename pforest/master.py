@@ -50,8 +50,8 @@ class master:
             self.dview.execute('from engine import engine')
         #self.dview.execute("reload(dataset)")
         for i,dv in enumerate(self.clients):
-            dv.execute('dset=dataset(%d,%d)'\
-            %(i,n_proposal//len(self.clients.ids)))
+            dv.execute('dset=dataset(%d,%d,_prefix="%s")'\
+            %(i,n_proposal//len(self.clients.ids), dsetname ))
         
         self.dview.execute('eng=engine(dset)')
         self.engines_path=self.dview.gather('dset.path')
